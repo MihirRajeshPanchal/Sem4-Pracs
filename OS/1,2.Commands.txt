@@ -1,0 +1,19 @@
+ls
+cat hello.txt
+pws
+whoami
+vi hello.txt
+nano hello.txt
+rm hello.txt
+ls -ls
+rmdir mihir
+ls -a
+pwd
+uname
+uname -a
+uname -r
+sort fruits
+who -u | wc -l
+echo "Hello"
+ps axl | head -n 10
+mv file1.txt /mihir 
