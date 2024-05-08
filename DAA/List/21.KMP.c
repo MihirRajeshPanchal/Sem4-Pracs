@@ -1,66 +1,65 @@
 #include <stdio.h>
 #include <string.h>
 
-void prefixSuffixArray(char *pat, int M, int *pps) {
+void prefixSuffixArray(char pat[], int M, int pps[])
+{
     int length = 0;
     pps[0] = 0;
     int i = 1;
-    while (i < M) {
-        if (pat[i] == pat[length]) {
+    while (i < M)
+    {
+        if (pat[i] == pat[length])
+        {
             length++;
             pps[i] = length;
             i++;
         }
-        else {
+        else
+        {
             if (length != 0)
                 length = pps[length - 1];
-            else {
+            else
+            {
                 pps[i] = 0;
                 i++;
             }
         }
     }
 }
-
-void KMPAlgorithm(char *text, char *pattern) {
+void KMPAlgorithm(char text[], char pattern[])
+{
     int M = strlen(pattern);
     int N = strlen(text);
     int pps[M];
     prefixSuffixArray(pattern, M, pps);
     int i = 0;
     int j = 0;
-    int flag = 0;
-    while (i < N) {
-        if (pattern[j] == text[i]) {
+    while (i < N)
+    {
+        if (pattern[j] == text[i])
+        {
             j++;
             i++;
         }
-        if (j == M) {
-            flag = 1;
+        if (j == M)
+        {
             printf("Found pattern at index %d\n", i - j);
             j = pps[j - 1];
         }
-        else if (i < N && pattern[j] != text[i]) {
+        else if (i < N && pattern[j] != text[i])
+        {
             if (j != 0)
                 j = pps[j - 1];
             else
                 i = i + 1;
         }
     }
-    if (flag == 0){
-        printf("Pattern not found\n");
-    }
 }
-
-int main() {
-    char text[100], pattern[100];
-    
-    printf("Enter the text: ");
-    scanf("%s", text);
-
-    printf("Enter the pattern: ");
-    scanf("%s", pattern);
-
+int main()
+{
+    char text[] = "xyztrwqxyzfg";
+    char pattern[] = "xyz";
+    printf("The pattern is found in the text at the following index : \n");
     KMPAlgorithm(text, pattern);
     return 0;
 }

@@ -1,44 +1,47 @@
 #include <stdio.h>
-#define MAX 100
-int n, m;
-int arr[MAX];
-int x[MAX];
-void sumOfSubsets(int k, int s, int r)
-{
-    int i;
-    x[k] = 1;
-    if (s + arr[k] == m)
-    {
-        for (i = 0; i < n; i++)
-        {
-            printf("%d ", x[i]);
+
+#define max 50
+
+int subset[max];
+int elements[max];
+int target;
+int n;
+
+void findSumofSubet(int index, int current_sum, int remaining_sum) {
+    if (current_sum == target) {
+        for (int i = 0; i < n; i++) {
+            printf("%d", subset[i]);
         }
         printf("\n");
+        return;
     }
-    else if (s + arr[k] + arr[k + 1] <= m)
-    {
-        sumOfSubsets(k + 1, s + arr[k], r - arr[k]);
+    
+    if (index == n || current_sum > target || current_sum + remaining_sum < target) {
+        return;
     }
-    if (s + arr[k + 1] <= m && s + r - arr[k] >= m)
-    {
-        x[k] = 0;
-        sumOfSubsets(k + 1, s, r - arr[k]);
-    }
+
+    subset[index] = 1;
+    findSumofSubet(index + 1, current_sum + elements[index], remaining_sum - elements[index]);
+
+    subset[index] = 0;
+    findSumofSubet(index + 1, current_sum, remaining_sum - elements[index]);
 }
-int main()
-{
-    int i, t;
-    t = 0;
-    printf("Number of elements : ");
+
+int main() {
+    printf("Enter Number of Elements : ");
     scanf("%d", &n);
-    printf("Enter the elements : ");
-    for (i = 0; i < n; i++)
-    {
-        scanf("%d", &arr[i]);
-        t += arr[i];
-        x[i] = 0;
+
+    int total_sum = 0;
+    printf("Enter Elements : \n");
+    for (int i = 0; i < n; i++) {
+        printf("Enter Element %d : ", i);
+        scanf("%d", &elements[i]);
+        total_sum += elements[i];
+        subset[i] = 0;
     }
-    printf("Sum : ");
-    scanf("%d", &m);
-    sumOfSubsets(0, 0, t);
+
+    printf("Enter Target Sum : ");
+    scanf("%d", &target);
+
+    findSumofSubet(0, 0, total_sum);
 }

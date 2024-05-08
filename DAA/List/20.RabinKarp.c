@@ -3,52 +3,61 @@
 
 #define d 256
 
-void search(char pat[], char txt[], int q) {
-    int M = strlen(pat);
-    int N = strlen(txt);
+void search(char pattern[], char text[], int prime) {
+    int pattern_length = strlen(pattern);
+    int text_length = strlen(text);
     int i, j;
-    int p = 0; 
-    int t = 0; 
-    int h = 1;
+    int pattern_hash = 0; 
+    int text_hash = 0; 
+    int hash_multiplier = 1;
 
-    for (i = 0; i < M - 1; i++)
-        h = (h * d) % q;
+    // Calculate (d^(pattern_length-1)) % prime
+    for (i = 0; i < pattern_length - 1; i++)
+        hash_multiplier = (hash_multiplier * d) % prime;
 
-    for (i = 0; i < M; i++) {
-        p = (d * p + pat[i]) % q;
-        t = (d * t + txt[i]) % q;
+    // Calculate the hash value of pattern and first window of text
+    for (i = 0; i < pattern_length; i++) {
+        pattern_hash = (d * pattern_hash + pattern[i]) % prime;
+        text_hash = (d * text_hash + text[i]) % prime;
     }
 
-    for (i = 0; i <= N - M; i++) {
-        if (p == t) {
-            for (j = 0; j < M; j++) {
-                if (txt[i + j] != pat[j])
+    // Slide the pattern over text one by one
+    for (i = 0; i <= text_length - pattern_length; i++) {
+        // Check the hash values of current window of text and pattern.
+        // If the hash values match then only check for characters one by one.
+        if (pattern_hash == text_hash) {
+            // Check characters one by one
+            for (j = 0; j < pattern_length; j++) {
+                if (text[i + j] != pattern[j])
                     break;
             }
-            if (j == M)
+            // If pattern hash matches and all characters matched, print the index
+            if (j == pattern_length)
                 printf("Pattern found at index %d \n", i);
         }
-        if (i < N - M) {
-            t = (d * (t - txt[i] * h) + txt[i + M]) % q;
-            if (t < 0)
-                t = (t + q);
+        // Calculate hash value for next window of text: Remove leading digit,
+        // add trailing digit, and take mod to ensure positive value.
+        if (i < text_length - pattern_length) {
+            text_hash = (d * (text_hash - text[i] * hash_multiplier) + text[i + pattern_length]) % prime;
+            if (text_hash < 0)
+                text_hash = (text_hash + prime);
         }
     }
 }
 
 int main() {
-    char txt[100], pat[100];
-    int q;
+    char text[100], pattern[100];
+    int prime;
 
     printf("Enter the text: ");
-    scanf("%s", txt);
+    scanf("%s", text);
 
     printf("Enter the pattern: ");
-    scanf("%s", pat);
+    scanf("%s", pattern);
 
     printf("Enter a prime number: ");
-    scanf("%d", &q);
+    scanf("%d", &prime);
 
-    search(pat, txt, q);
+    search(pattern, text, prime);
     return 0;
 }
