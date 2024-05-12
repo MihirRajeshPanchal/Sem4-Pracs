@@ -9,27 +9,33 @@ struct Processes {
     int bt;
     int ct;
     int tat;
-    int remaining_bt;
+    int wt;
 };
 
+int compare(const void* a, const void* b){
+    return ((struct Processes *)a)->at - ((struct Processes *)b)->at;
+}
+
 void RoundRobin(struct Processes *process, int n) {
+    qsort(process,n,sizeof(struct Processes),compare);
     int current_time = 0;
-    int *remaining_time = (int *)malloc(n * sizeof(int));
+    int remaining_time[n];
     for (int i = 0; i < n; i++) {
         remaining_time[i] = process[i].bt;
     }
 
-    while (1) {
+    while (1)
+    {
         int done = 1;
-
-        for (int i = 0; i < n; i++) {
-            if (remaining_time[i] > 0) {
+        for(int i = 0; i<n; i++){
+            if(remaining_time[i] > 0){
                 done = 0;
 
-                if (remaining_time[i] > TIME_QUANTUM) {
+                if(remaining_time[i]> TIME_QUANTUM){
                     current_time += TIME_QUANTUM;
                     remaining_time[i] -= TIME_QUANTUM;
-                } else {
+                }
+                else{
                     current_time += remaining_time[i];
                     process[i].ct = current_time;
                     remaining_time[i] = 0;
@@ -37,24 +43,33 @@ void RoundRobin(struct Processes *process, int n) {
             }
         }
 
-        if (done == 1) 
+        if(done==1){
             break;
-    }
+        }
 
-    free(remaining_time);
-
-    for (int i = 0; i < n; i++) {
-        process[i].tat = process[i].ct - process[i].at;
+        for (int i = 0; i < n; i++) {
+            process[i].tat = process[i].ct - process[i].at;
+            process[i].wt = process[i].tat - process[i].bt;
+        }
     }
+    
+
 }
 
 void printResults(struct Processes *process, int n) {
-    printf("Process\t Arrival Time\t Burst Time\t Completion Time\t Turnaround Time\n");
-    for (int i = 0; i < n; i++) {
-        printf("%d\t\t %d\t\t %d\t\t %d\t\t\t %d\n", process[i].process_id, process[i].at, process[i].bt, process[i].ct, process[i].tat);
-    }
-}
+    int total_tat = 0, total_wt = 0;
 
+    printf("Process\t Arrival Time\t Burst Time\t Completion Time\t Turnaround Time\t Waiting Time\n");
+
+    for (int i = 0; i < n; i++) {
+        printf("%d\t\t %d\t\t %d\t\t %d\t\t\t %d\t\t\t %d\n", process[i].process_id, process[i].at, process[i].bt, process[i].ct, process[i].tat, process[i].wt);
+        total_tat += process[i].tat;
+        total_wt += process[i].wt;
+    }
+
+    printf("\nAverage Turn Around Time: %.2f", (float)total_tat / n);
+    printf("\nAverage Waiting Time: %.2f", (float)total_wt / n);
+}
 int main() {
     // int n;
 
@@ -74,11 +89,11 @@ int main() {
 
     int n = 5;
     struct Processes process[5] = {
-        {1, 0, 4, 0, 0, 0},
-        {2, 1, 3, 0, 0, 0},
-        {3, 2, 5, 0, 0, 0},
-        {4, 3, 2, 0, 0, 0},
-        {5, 4, 1, 0, 0, 0}
+        {1, 5, 4, 0, 0},
+        {2, 1, 3, 0, 0},
+        {3, 2, 5, 0, 0},
+        {4, 3, 2, 0, 0},
+        {5, 4, 1, 0, 0}
     };
 
     RoundRobin(process, n);

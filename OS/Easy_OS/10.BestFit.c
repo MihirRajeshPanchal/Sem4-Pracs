@@ -2,54 +2,45 @@
 
 void bestFit(int blockSize[], int m, int processSize[], int n)
 {
-
-    int allocation[n];
-
-    for (int i = 0; i < n; i++)
-        allocation[i] = -1;
-
-    for (int i = 0; i < n; i++)
-    {
-
-        int bestIdx = -1;
-        for (int j = 0; j < m; j++)
-        {
-            if (blockSize[j] >= processSize[i])
-            {
-                if (bestIdx == -1)
-                    bestIdx = j;
-                else if (blockSize[bestIdx] > blockSize[j])
-                    bestIdx = j;
-            }
-        }
-
-        if (bestIdx != -1)
-        {
-
-            allocation[i] = bestIdx;
-
-            blockSize[bestIdx] -= processSize[i];
-        }
+    int allocatedIndex[m];
+    int allocatedProcess[m];
+    int fragment[m];
+    for(int i = 0; i<m; i++){
+        allocatedIndex[i] = -1;
+        allocatedProcess[i] = -1;
+        fragment[i] = -1;
     }
 
-    printf("\nProcess No.\tProcess Size\tBlock no.\n");
-    for (int i = 0; i < n; i++)
-    {
-        printf(" %d\t\t%d\t\t", i + 1, processSize[i]);
-        if (allocation[i] != -1)
-            printf("%d", allocation[i] + 1);
-        else
-            printf("Not Allocated");
-        printf("\n");
+    for(int i=0; i<n; i++){
+        int bestIdx = -1;
+        for(int j=0; j < m; j++){
+            if (blockSize[j] >= processSize[i] && allocatedIndex[j]==-1)
+            {
+                if (bestIdx == -1 || blockSize[bestIdx] > blockSize[j]){
+                    bestIdx = j;
+                }
+            }
+        }
+        if(bestIdx!=-1){
+            allocatedIndex[bestIdx] = i;
+            allocatedProcess[bestIdx] = processSize[i];
+            fragment[bestIdx] = blockSize[bestIdx] - processSize[i];
+        }
+    }
+    printf("Printing Results\n");
+    printf("Block Number\t\t\t Block Size\t\t\t Process Id\t\t\t Process Size\t\t\t Fragmentation\n");
+    for(int i=0; i<m; i++){
+        printf("%d\t\t\t\t%d\t\t\t\t%d\t\t\t\t%d\t\t\t\t%d\t\t\t\t\n",i+1,blockSize[i],allocatedIndex[i],allocatedProcess[i],fragment[i]);
     }
 }
 
+
 int main()
 {
-    printf("\n--- Best Fit ---");
-    int blockSize1[] = {100, 500, 200, 300, 600};
-    int processSize1[] = {212, 417, 112, 426};
-    int m = sizeof(blockSize1) / sizeof(blockSize1[0]);
-    int n = sizeof(processSize1) / sizeof(processSize1[0]);
-    bestFit(blockSize1, m, processSize1, n);
+    printf("\n --- Best Fit ---");
+    int blockSize[] = {100, 500, 200, 450, 600};
+    int processSize[] = {212, 417, 112, 426};
+    int m = sizeof(blockSize) / sizeof(blockSize[0]);
+    int n = sizeof(processSize) / sizeof(processSize[0]);
+    bestFit(blockSize, m, processSize, n);
 }

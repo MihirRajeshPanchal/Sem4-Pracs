@@ -2,47 +2,45 @@
 
 void worstFit(int blockSize[], int m, int processSize[], int n)
 {
-    int allocation[n];
-    for (int i = 0; i < n; i++)
-        allocation[i] = -1;
-    for (int i = 0; i < n; i++)
-    {
-        int wstIdx = -1;
-        for (int j = 0; j < m; j++)
-        {
-            if (blockSize[j] >= processSize[i])
+    int allocatedIndex[m];
+    int allocatedProcess[m];
+    int fragment[m];
+    for(int i = 0; i<m; i++){
+        allocatedIndex[i] = -1;
+        allocatedProcess[i] = -1;
+        fragment[i] = -1;
+    }
+
+    for(int i=0; i<n; i++){
+        int worstIdx = -1;
+        for(int j=0; j < m; j++){
+            if (blockSize[j] >= processSize[i] && allocatedIndex[j]==-1)
             {
-                if (wstIdx == -1)
-                    wstIdx = j;
-                else if (blockSize[wstIdx] < blockSize[j])
-                    wstIdx = j;
+                if (worstIdx == -1 || blockSize[worstIdx] < blockSize[j]){
+                    worstIdx = j;
+                }
             }
         }
-
-        if (wstIdx != -1)
-        {
-            allocation[i] = wstIdx;
-            blockSize[wstIdx] -= processSize[i];
+        if(worstIdx!=-1){
+            allocatedIndex[worstIdx] = i;
+            allocatedProcess[worstIdx] = processSize[i];
+            fragment[worstIdx] = blockSize[worstIdx] - processSize[i];
         }
     }
-    printf("\nProcess No.\tProcess Size\tBlock no.\n");
-    for (int i = 0; i < n; i++)
-    {
-        printf(" %d\t\t%d\t\t", i + 1, processSize[i]);
-        if (allocation[i] != -1)
-            printf("%d", allocation[i] + 1);
-        else
-            printf("Not Allocated");
-        printf("\n");
+    printf("Printing Results\n");
+    printf("Block Number\t\t\t Block Size\t\t\t Process Id\t\t\t Process Size\t\t\t Fragmentation\n");
+    for(int i=0; i<m; i++){
+        printf("%d\t\t\t\t%d\t\t\t\t%d\t\t\t\t%d\t\t\t\t%d\t\t\t\t\n",i+1,blockSize[i],allocatedIndex[i],allocatedProcess[i],fragment[i]);
     }
 }
 
+
 int main()
 {
-    printf("\n--- Worst Fit ---");
-    int blockSize2[] = {100, 500, 200, 300, 600};
-    int processSize2[] = {212, 417, 112, 426};
-    int m = sizeof(blockSize2) / sizeof(blockSize2[0]);
-    int n = sizeof(processSize2) / sizeof(processSize2[0]);
-    worstFit(blockSize2, m, processSize2, n);
+    printf("\n --- Best Fit ---");
+    int blockSize[] = {100, 500, 200, 450, 600};
+    int processSize[] = {212, 417, 112, 426};
+    int m = sizeof(blockSize) / sizeof(blockSize[0]);
+    int n = sizeof(processSize) / sizeof(processSize[0]);
+    worstFit(blockSize, m, processSize, n);
 }
