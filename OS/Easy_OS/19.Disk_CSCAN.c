@@ -1,129 +1,131 @@
 #include <stdio.h>
 
-int absolute(int x, int y)
+int absolute(int first, int second)
 {
-    if (x >= y)
+    if (first >= second)
     {
-        return x - y;
+        return first - second;
     }
     else
     {
-        return y - x;
+        return second - first;
     }
 }
 
-int CSCAN(int n, int p, int m[], int ans[], int u)
+int circularScan(int numMovements, int currentPosition, int movements[], int result[], int direction)
 {
-    int total = 0;
-    int a, x;
-    for (int i = 0; i < n; i++)
+    int totalSeekTime = 0;
+    int currentMovementIndex, startPoint;
+    for (int i = 0; i < numMovements; i++)
     {
-        if (p < m[i])
+        if (currentPosition < movements[i])
         {
-            a = x = i;
+            currentMovementIndex = startPoint = i;
             break;
         }
     }
-    if (u == 0)
+    if (direction == 0)
     {
-        a--;
+        currentMovementIndex--;
     }
 
-    for (int i = 0; i < n + 2; i++)
+    for (int i = 0; i < numMovements + 2; i++)
     {
-        if (u == 1)
+        if (direction == 1)
         {
-            if (a < n && a >= x)
+            if (currentMovementIndex < numMovements && currentMovementIndex >= startPoint)
             {
-                ans[i] = m[a];
-                a++;
+                result[i] = movements[currentMovementIndex];
+                currentMovementIndex++;
             }
-            else if (a == n)
+            else if (currentMovementIndex == numMovements)
             {
-                ans[i] = 199;
-                a = -1;
+                result[i] = 199;
+                currentMovementIndex = -1;
             }
-            else if (a == -1)
+            else if (currentMovementIndex == -1)
             {
-                ans[i] = 0;
-                a++;
+                result[i] = 0;
+                currentMovementIndex++;
             }
             else
             {
-                ans[i] = m[a];
-                a++;
+                result[i] = movements[currentMovementIndex];
+                currentMovementIndex++;
             }
         }
         else
         {
-            if (a >= 0 && a < x)
+            if (currentMovementIndex >= 0 && currentMovementIndex < startPoint)
             {
-                ans[i] = m[a];
-                a--;
+                result[i] = movements[currentMovementIndex];
+                currentMovementIndex--;
             }
-            else if (a == -1)
+            else if (currentMovementIndex == -1)
             {
-                ans[i] = 0;
-                a = n;
+                result[i] = 0;
+                currentMovementIndex = numMovements;
             }
-            else if (a == n)
+            else if (currentMovementIndex == numMovements)
             {
-                ans[i] = 199;
-                a--;
+                result[i] = 199;
+                currentMovementIndex--;
             }
             else
             {
-                ans[i] = m[a];
-                a--;
+                result[i] = movements[currentMovementIndex];
+                currentMovementIndex--;
             }
         }
     }
 
-    if (u == 1)
+    if (direction == 1)
     {
-        total = absolute(199, p) + 199 + absolute(0, m[x - 1]);
+        totalSeekTime = absolute(199, currentPosition) + 199 + absolute(0, movements[startPoint - 1]);
     }
     else
     {
-        total = absolute(0, p) + 199 + absolute(199, m[x]);
+        totalSeekTime = absolute(0, currentPosition) + 199 + absolute(199, movements[startPoint]);
     }
 
-    return total;
+    return totalSeekTime;
 }
 
-void print(int n, int p, int ans[], int total)
+void printResult(int numMovements, int currentPosition, int result[], int totalSeekTime)
 {
     printf("\nTrack movements are as follows : \n");
-    printf("%d -> %d", p, ans[0]);
-    for (int i = 1; i < n; i++)
+    printf("%d -> %d", currentPosition, result[0]);
+    for (int i = 1; i < numMovements; i++)
     {
-        printf(" -> %d", ans[i]);
+        printf(" -> %d", result[i]);
     }
 
-    printf("\nTotal seek time is : %d\n", total);
+    printf("\nTotal seek time is : %d\n", totalSeekTime);
 }
 
 int main()
 {
-    // int n, p;
+    // int numMovements, currentPosition;
     // printf("\nEnter the number of movements : ");
-    // scanf("%d", &n);
+    // scanf("%d", &numMovements);
 
-    // int m[n];
-    // printf("\nEnter %d movements (0 - 199) : ", n);
-    // for (int i = 0; i < n; i++)
+    // int movements[numMovements];
+    // printf("\nEnter %d movements (0 - 199) : ", numMovements);
+    // for (int i = 0; i < numMovements; i++)
     // {
-    //     scanf("%d", &m[i]);
+    //     scanf("%d", &movements[i]);
     // }
 
     // printf("\nEnter the current head location : ");
-    // scanf("%d", &p);
+    // scanf("%d", &currentPosition);
 
 
-    int n=5,p=65;
-    int m[]={25,51,60,132,189};
-    int total, ans[n];
-    int u = 0;
-    total = CSCAN(n, p, m, ans, u);
-    print(n + 2, p, ans, total);
+    int numMovements = 5;
+    int currentPosition = 65;
+    int movements[] = {25, 51, 60, 132, 189};
+    int totalSeekTime, result[numMovements];
+    int direction;
+    int clockwiseDirection = 0;
+    totalSeekTime = circularScan(numMovements, currentPosition, movements, result, clockwiseDirection);
+    printResult(numMovements + 2, currentPosition, result, totalSeekTime);
 }

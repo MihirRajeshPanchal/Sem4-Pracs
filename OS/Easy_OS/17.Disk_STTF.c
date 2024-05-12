@@ -1,86 +1,87 @@
 #include <stdio.h>
 
-int absolute(int x, int y)
+// Function to calculate the absolute difference between two integers
+int absolute(int a, int b)
 {
-    if (x >= y)
+    if (a >= b)
     {
-        return x - y;
+        return a - b;
     }
     else
     {
-        return y - x;
+        return b - a;
     }
 }
 
-int SSTF(int n, int p, int m[], int ans[])
+// Function to implement Shortest Seek Time First (SSTF) disk scheduling algorithm
+int shortestSeekTimeFirst(int numMovements, int currentHead, int movements[], int answer[])
 {
-    int total = 0;
-    int current, v[n];
-    for (int i = 0; i < n; i++)
+    int totalSeekTime = 0;
+    int currentPosition, visited[numMovements];
+    for (int i = 0; i < numMovements; i++)
     {
-        v[i] = 0;
+        visited[i] = 0;
     }
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < numMovements; i++)
     {
         if (i == 0)
         {
-            current = p;
+            currentPosition = currentHead;
         }
         else
         {
-            current = ans[i - 1];
+            currentPosition = answer[i - 1];
         }
-        int min = 199, j, x;
-        for (j = 0; j < n; j++)
+        int minDistance = 199, selectedMovementIndex, temp;
+        for (int j = 0; j < numMovements; j++)
         {
-            if (absolute(current, m[j]) <= min && v[j] == 0)
+            if (absolute(currentPosition, movements[j]) <= minDistance && visited[j] == 0)
             {
-                min = absolute(current, m[j]);
-                x = j;
+                minDistance = absolute(currentPosition, movements[j]);
+                selectedMovementIndex = j;
             }
         }
-        v[x] = 1;
-        total += min;
-        ans[i] = m[x];
+        visited[selectedMovementIndex] = 1;
+        totalSeekTime += minDistance;
+        answer[i] = movements[selectedMovementIndex];
     }
 
-    return total;
+    return totalSeekTime;
 }
 
-void print(int n, int p, int ans[], int total)
+// Function to print the movements and total seek time
+void printMovements(int numMovements, int currentHead, int answer[], int totalSeekTime)
 {
-    printf("\nTrack movements are as follows : \n");
-    printf("%d -> %d", p, ans[0]);
-    for (int i = 1; i < n; i++)
+    printf("\nTrack movements are as follows: \n");
+    printf("%d -> %d", currentHead, answer[0]);
+    for (int i = 1; i < numMovements; i++)
     {
-        printf(" -> %d", ans[i]);
+        printf(" -> %d", answer[i]);
     }
 
-    printf("\nTotal seek time is : %d\n", total);
+    printf("\nTotal seek time is: %d\n", totalSeekTime);
 }
 
 int main()
 {
+    // int numMovements, currentHead;
+    // printf("\nEnter the number of movements: ");
+    // scanf("%d", &numMovements);
 
-    // int n, p;
-    // printf("\nEnter the number of movements : ");
-    // scanf("%d", &n);
-
-    // int m[n];
-    // printf("\nEnter %d movements (0 - 199) : ", n);
-    // for (int i = 0; i < n; i++)
+    // int movements[numMovements];
+    // printf("\nEnter %d movements (0 - 199): ", numMovements);
+    // for (int i = 0; i < numMovements; i++)
     // {
-    //     scanf("%d", &m[i]);
+    //     scanf("%d", &movements[i]);
     // }
 
-    // printf("\nEnter the current head location : ");
-    // scanf("%d", &p);
+    // printf("\nEnter the current head location: ");
+    // scanf("%d", &currentHead);
 
-
-    int n=5,p=65;
-    int m[]={25,51,60,132,189};
-    int total, ans[n];
-    total = SSTF(n, p, m, ans);
-    print(n, p, ans, total);
+    int numMovements = 5, currentHead = 65;
+    int movements[] = {25, 51, 60, 132, 189};
+    int totalSeekTime, answer[numMovements];
+    totalSeekTime = shortestSeekTimeFirst(numMovements, currentHead, movements, answer);
+    printMovements(numMovements, currentHead, answer, totalSeekTime);
 }

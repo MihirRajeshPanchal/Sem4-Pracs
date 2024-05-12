@@ -30,7 +30,7 @@ public class Multithreading {
         Thread t1 = new Thread(b2);
         t1.setName("Mihir");
         Thread t2 = new Thread(b2);
-        t2.setName("Mrunali");
+        t2.setName("Prinkal");
         t1.start();
         t2.start();
     }

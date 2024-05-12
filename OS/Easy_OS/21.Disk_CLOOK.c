@@ -1,118 +1,118 @@
 #include <stdio.h>
 
-int absolute(int x, int y)
+int absolute(int first, int second)
 {
-    if (x >= y)
+    if (first >= second)
     {
-        return x - y;
+        return first - second;
     }
     else
     {
-        return y - x;
+        return second - first;
     }
 }
 
-int CLOOK(int n, int p, int m[], int ans[], int u)
+int circularLook(int numMovements, int currentPosition, int movements[], int result[], int upDirection)
 {
-    int total = 0;
-    int a, x;
-    for (int i = 0; i < n; i++)
+    int totalSeekTime = 0;
+    int currentMovementIndex, startPoint;
+    for (int i = 0; i < numMovements; i++)
     {
-        if (p < m[i])
+        if (currentPosition < movements[i])
         {
-            a = x = i;
+            currentMovementIndex = startPoint = i;
             break;
         }
     }
-    if (u == 0)
+    if (upDirection == 0)
     {
-        a--;
+        currentMovementIndex--;
     }
 
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < numMovements; i++)
     {
-        if (u == 1)
+        if (upDirection == 1)
         {
-            if (a < n && a >= x)
+            if (currentMovementIndex < numMovements && currentMovementIndex >= startPoint)
             {
-                ans[i] = m[a];
-                a++;
-                if (a == n)
+                result[i] = movements[currentMovementIndex];
+                currentMovementIndex++;
+                if (currentMovementIndex == numMovements)
                 {
-                    a = 0;
+                    currentMovementIndex = 0;
                 }
             }
             else
             {
-                ans[i] = m[a];
-                a++;
+                result[i] = movements[currentMovementIndex];
+                currentMovementIndex++;
             }
         }
         else
         {
-            if (a >= 0 && a < x)
+            if (currentMovementIndex >= 0 && currentMovementIndex < startPoint)
             {
-                ans[i] = m[a];
-                a--;
-                if (a == -1)
+                result[i] = movements[currentMovementIndex];
+                currentMovementIndex--;
+                if (currentMovementIndex == -1)
                 {
-                    a = n - 1;
+                    currentMovementIndex = numMovements - 1;
                 }
             }
             else
             {
-                ans[i] = m[a];
-                a--;
+                result[i] = movements[currentMovementIndex];
+                currentMovementIndex--;
             }
         }
     }
 
-    if (u == 1)
+    if (upDirection == 1)
     {
-        total = absolute(m[n - 1], p) + absolute(m[n - 1], m[0]) + absolute(m[0], m[x - 1]);
+        totalSeekTime = absolute(movements[numMovements - 1], currentPosition) + absolute(movements[numMovements - 1], movements[0]) + absolute(movements[0], movements[startPoint - 1]);
     }
     else
     {
-        total = absolute(m[0], p) + absolute(m[n - 1], m[0]) + absolute(m[n - 1], m[x]);
+        totalSeekTime = absolute(movements[0], currentPosition) + absolute(movements[numMovements - 1], movements[0]) + absolute(movements[numMovements - 1], movements[startPoint]);
     }
 
-    return total;
+    return totalSeekTime;
 }
 
-void print(int n, int p, int ans[], int total)
+void printResult(int numMovements, int currentPosition, int result[], int totalSeekTime)
 {
     printf("\nTrack movements are as follows : \n");
-    printf("%d -> %d", p, ans[0]);
-    for (int i = 1; i < n; i++)
+    printf("%d -> %d", currentPosition, result[0]);
+    for (int i = 1; i < numMovements; i++)
     {
-        printf(" -> %d", ans[i]);
+        printf(" -> %d", result[i]);
     }
 
-    printf("\nTotal seek time is : %d\n", total);
+    printf("\nTotal seek time is : %d\n", totalSeekTime);
 }
 
 int main()
 {
-    // int n, p;
+    // int numMovements, currentPosition;
     // printf("\nEnter the number of movements : ");
-    // scanf("%d", &n);
+    // scanf("%d", &numMovements);
 
-    // int m[n];
-    // printf("\nEnter %d movements (0 - 199) : ", n);
-    // for (int i = 0; i < n; i++)
+    // int movements[numMovements];
+    // printf("\nEnter %d movements (0 - 199) : ", numMovements);
+    // for (int i = 0; i < numMovements; i++)
     // {
-    //     scanf("%d", &m[i]);
+    //     scanf("%d", &movements[i]);
     // }
 
     // printf("\nEnter the current head location : ");
-    // scanf("%d", &p);
+    // scanf("%d", &currentPosition);
 
 
-    int n=5,p=65;
-    int m[]={25,51,60,132,189};
-    int total, ans[n];
-    int c;
-    int u = 1;
-    total = CLOOK(n, p, m, ans, u);
-    print(n, p, ans, total);
+    int numMovements = 5;
+    int currentPosition = 65;
+    int movements[] = {25, 51, 60, 132, 189};
+    int totalSeekTime, result[numMovements];
+    int upDirection = 1;
+    totalSeekTime = circularLook(numMovements, currentPosition, movements, result, upDirection);
+    printResult(numMovements, currentPosition, result, totalSeekTime);
 }
