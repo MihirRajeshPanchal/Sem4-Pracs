@@ -1,19 +1,19 @@
-; Mihir Panchal Factorial
-
-data segment
+DATA SEGMENT
     fact dw ?
     num dw 05h
-data ends
+DATA ENDS
 
-code segment
-    start:mov ax, data
-    mov ds, ax
-    mov ax, 01h
-    mov cx, num
-    l1:
-        mul cx
-        dec cx
-        jnz l1
-    mov fact, ax
-code ends
-end start
+CODE SEGMENT
+   START:
+        MOV AX,DATA
+        MOV DS,AX
+        MOV AX,01H
+        MOV CX,NUM
+        li:
+            MUL CX
+            DEC CX
+            JNZ li
+        MOV fact,ax
+    
+CODE ENDS          
+END START

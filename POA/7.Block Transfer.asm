@@ -1,28 +1,22 @@
-; Mihir Panchal 60004230275
+DATA SEGMENT
+    S1 DB 10,1,2,3,4,5,6,7,8,9,10
+    S2 DB 10 DUP(0)
+DATA ENDS
 
-data segment
-seg1 db 1h ,2h ,3h
-ends
-extra segment
-seg2 db ?
-ends
-code segment
-start:
-mov ax, data
-mov ds, ax
-mov ax, extra
-mov es, ax
-; add your code here
-lea si , seg1
-lea di , seg2 
-mov cx, 03h
-x: mov ah,ds:[si]
-mov es:[di],ah
-
-inc si
-inc di
-dec cx 
-jnz x
-
-ends
-end start
+CODE SEGMENT
+    ASSUME CS:CODE, DS:DATA
+    START:
+        MOV AX,DATA
+        MOV DS,AX
+        MOV ES,AX
+        LEA SI, S1
+        LEA DI, S2
+        MOV CL, [SI]
+        MOV CH, 00H
+        INC SI
+        CLD
+        REP MOVSB
+        MOV AX,4C00H
+        INT 21H
+CODE ENDS
+END START

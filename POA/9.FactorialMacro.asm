@@ -1,23 +1,22 @@
-; Mihir Panchal Factorial using Macro
-
-data segment
+DATA SEGMENT
     fact dw ?
     num dw 05h
-data ends
+DATA ENDS
 
-macro factorial n
-    mov cx, n
-    l1:
-        mul cx
-        dec cx
-        jnz l1
-endm
+MACRO factorial n
+    MOV CX, n
+    l1: 
+        MUL CX
+        DEC CX
+        JNZ l1
+ENDM
 
-code segment
-    start:mov ax, data
-    mov ds, ax
-    mov ax, 01h
-    factorial num
-    mov fact, ax
-code ends
-end start
+CODE SEGMENT
+    START:
+        MOV AX,DATA
+        MOV DS,AX
+        MOV AX,01H
+        factorial num
+        MOV fact,ax
+CODE ENDS
+END START
