@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Doctor Appointment Form</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f9f9f9;
+      }
+      form {
+        max-width: 400px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      input, select {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <form id="appointmentForm" onsubmit="return validateForm()">
+      <input type="text" id="name" placeholder="Your Name" required />
+      <input type="email" id="email" placeholder="Your Email" required />
+      <input type="date" id="date" required />
+      <input type="time" id="time" required />
+      <select id="service" required>
+        <option value="">Select Service</option>
+        <option value="Consultation">Consultation</option>
+        <option value="Check-up">Check-up</option>
+        <option value="Procedure">Procedure</option>
+      </select>
+      <label for="payment">Payment Method:</label>
+      <input type="checkbox" id="onlinePayment" value="Online" /> Online
+      <input type="checkbox" id="offlinePayment" value="Offline" /> Offline
+      <button type="submit">Book Appointment</button>
+    </form>
+
+    <script>
+      function validateForm() {
+        const name = document.getElementById("name").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const date = document.getElementById("date").value;
+        const time = document.getElementById("time").value;
+        const service = document.getElementById("service").value;
+        const onlinePayment = document.getElementById("onlinePayment").checked;
+        const offlinePayment =
+          document.getElementById("offlinePayment").checked;
+
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        if (
+          name === "" ||
+          email === "" ||
+          date === "" ||
+          time === "" ||
+          service === "" ||
+          (!onlinePayment && !offlinePayment)
+        ) {
+          alert("Please fill in all fields.");
+          return false;
+        }
+
+        if (!email.match(emailPattern)) {
+          alert("Please enter a valid email address.");
+          return false;
+        }
+
+        const appointmentDetails = `
+        Name: ${name}
+        Email: ${email}
+        Date: ${date}
+        Time: ${time}
+        Service: ${service}
+        Payment Method: ${onlinePayment ? "Online" : "Offline"}
+    `;
+
+        localStorage.setItem("appointmentDetails", appointmentDetails);
+        window.location.href = "confirmation.html";
+        return false;
+      }
+    </script>
+  </body>
+</html>

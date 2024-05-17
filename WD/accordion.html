@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accordion Menu</title>
+<style>
+  .accordion {
+    max-width: 600px;
+    margin: 20px auto;
+  }
+
+  .accordion-item {
+    border-bottom: 1px solid #ccc;
+  }
+
+  .accordion-header {
+    background-color: #f4f4f4;
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .accordion-content {
+    padding: 10px;
+    display: none;
+  }
+
+  .accordion-content.active {
+    display: block;
+  }
+</style>
+</head>
+<body>
+
+<div class="accordion">
+  <div class="accordion-item">
+    <div class="accordion-header">Section 1</div>
+    <div class="accordion-content">
+      <p>This is the content of section 1.</p>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <div class="accordion-header">Section 2</div>
+    <div class="accordion-content">
+      <p>This is the content of section 2.</p>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <div class="accordion-header">Section 3</div>
+    <div class="accordion-content">
+      <p>This is the content of section 3.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const accordionItems = document.querySelectorAll('.accordion-item');
+
+  accordionItems.forEach(item => {
+    const header = item.querySelector('.accordion-header');
+    const content = item.querySelector('.accordion-content');
+
+    header.addEventListener('click', () => {
+      content.classList.toggle('active');
+    });
+  });
+});
+</script>
+
+</body>
+</html>

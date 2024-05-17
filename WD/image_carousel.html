@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Carousel</title>
+  </head>
+
+  <body>
+    <div style="display: flex; flex-direction: column; padding: 20px">
+      <img src="images/bg.jpg" id="image" width="500px" />
+      <div
+        style="
+          display: block;
+          justify-content: space-between;
+          font-size: larger;
+        "
+      >
+        <button
+          id="left"
+          style="margin-right: 390px; font-size: large; margin-top: 20px"
+        >
+          Left
+        </button>
+        <button id="right" style="font-size: large; margin-top: 20px">
+          Right
+        </button>
+      </div>
+    </div>
+  </body>
+  
+  <script>
+    const image = document.getElementById("image");
+    const array = ["images/bg.jpg", "images/bg1.jpg", "images/bg2.jpg"];
+    
+    document.getElementById("right").addEventListener("click", () => {
+      const url = image.src;
+      const lastIndex = url.lastIndexOf("/");
+      const fileName = url.substring(lastIndex + 1);
+      let imageIndex = array.findIndex(img => img.endsWith(fileName));
+      
+      imageIndex = (imageIndex + 1) % array.length;
+      image.src = array[imageIndex];
+    });
+
+    document.getElementById("left").addEventListener("click", () => {
+      const url = image.src;
+      const lastIndex = url.lastIndexOf("/");
+      const fileName = url.substring(lastIndex + 1);
+      let imageIndex = array.findIndex(img => img.endsWith(fileName));
+      
+      if (imageIndex === 0) {
+        imageIndex = array.length - 1;
+      } else {
+        imageIndex = (imageIndex - 1) % array.length;
+      }
+      image.src = array[imageIndex];
+    });
+  </script>
+</html>

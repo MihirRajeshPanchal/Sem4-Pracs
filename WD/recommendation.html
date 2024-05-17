@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+  </head>
+  <body>
+    <div class="container">
+      <div class="wrapper">
+        <input
+          type="text"
+          name="search"
+          id="search"
+          placeholder="Type to search"
+          autocomplete="chrome-off"
+        />
+        <button id="addButton"><i class="fa fa-plus"></i></button>
+        <div class="results">
+          <ul></ul>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      let searchable = [
+        "Elastic",
+        "PHP",
+        "Something about CSS",
+        "How to code",
+        "JavaScript",
+        "Coding",
+        "Some other item",
+        "hey",
+
+      ];
+
+      const searchInput = document.getElementById("search");
+      const addButton = document.getElementById("addButton");
+      const searchWrapper = document.querySelector(".wrapper");
+      const resultsWrapper = document.querySelector(".results");
+
+      searchInput.addEventListener("keyup", () => {
+        let results = [];
+        let input = searchInput.value;
+        if (input.length) {
+          results = searchable.filter((item) => {
+            return item.toLowerCase().includes(input.toLowerCase());
+          });
+        }
+        renderResults(results);
+      });
+
+      addButton.addEventListener("click", () => {
+        const newItem = prompt("Enter a new item to add:");
+        if (newItem) {
+          searchable.push(newItem);
+        }
+      });
+
+      function renderResults(results) {
+        if (!results.length) {
+          return searchWrapper.classList.remove("show");
+        }
+
+        const content = results
+          .map((item) => {
+            return `<li>${item}</li>`;
+          })
+          .join("");
+
+        searchWrapper.classList.add("show");
+        resultsWrapper.innerHTML = `<ul>${content}</ul>`;
+      }
+      
+    </script>
+  </body>
+</html>

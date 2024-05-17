@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Change Background Color</title>
+    <style>
+        /* Internal CSS */
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+        }
+
+        button:hover {
+            background-color: #45a049; /* Darker Green */
+        }
+    </style>
+  </head>
+  <body>
+    <button id="changeColorButton">Change Background Color</button>
+
+    <script>
+      const changeColorButton = document.getElementById("changeColorButton");
+
+      changeColorButton.addEventListener("click", function () {
+        // Generate a random hexadecimal color
+        const randomColor =
+          "#" + Math.floor(Math.random() * 16777215).toString(16);
+
+        // Change the background color of the body
+        document.body.style.backgroundColor = randomColor;
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Appointment Confirmation</title>
+  </head>
+  <body>
+    <h1>Appointment Confirmation</h1>
+    <pre id="appointmentDetails"></pre>
+
+    <script>
+      const appointmentDetails = localStorage.getItem("appointmentDetails");
+      document.getElementById("appointmentDetails").textContent =
+        appointmentDetails;
+    </script>
+  </body>
+</html>
